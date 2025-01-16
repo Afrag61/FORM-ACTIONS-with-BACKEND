@@ -1,8 +1,11 @@
-import { useActionState } from "react";
-import { isEmpty, hasMinLength, isNotBetween } from "../../validation.js";
+import { isEmpty, hasMinLength, isNotBetween } from "../validation.js";
+import { useActionState, useContext } from 'react'
+import { OpinionsContext } from './../store/opinions-context.jsx'
 
 export function NewOpinion() {
-  const shareOpinionAction = (prevFormState, formData) => {
+  const { addOpinion } = useContext(OpinionsContext)
+
+  const shareOpinionAction = async (prevFormState, formData) => {
     const userName = formData.get("userName");
     const title = formData.get("title");
     const body = formData.get("body");
@@ -14,7 +17,7 @@ export function NewOpinion() {
     }
 
     if (hasMinLength(title, 5)) {
-      errors.push("title must be at least five characters long.");
+      errors.push("Title must be at least five characters long.");
     }
 
     if (isNotBetween(body, 10, 300)) {
@@ -27,19 +30,17 @@ export function NewOpinion() {
         enteredValues: {
           userName,
           title,
-          body,
-        },
+          body
+        }
       };
     }
 
-    // submit to backend
+    await addOpinion({userName, title, body})
 
-    return { errors: null };
+    return { errors: null}
   };
 
-  const [formState, formAction] = useActionState(shareOpinionAction, {
-    errors: null,
-  });
+  const [formState, formAction] = useActionState(shareOpinionAction, { errors: null })
 
   return (
     <div id="new-opinion">
@@ -48,7 +49,7 @@ export function NewOpinion() {
         <div className="control-row">
           <p className="control">
             <label htmlFor="userName">Your Name</label>
-            <input type="text" id="userName" name="userName" defaultValue={formState.enteredValues?.userName} />
+            <input type="text" id="userName" name="userName" defaultValue={formState.enteredValues?.userName}/>
           </p>
 
           <p className="control">
@@ -60,13 +61,11 @@ export function NewOpinion() {
           <label htmlFor="body">Your Opinion</label>
           <textarea id="body" name="body" rows={5} defaultValue={formState.enteredValues?.body}></textarea>
         </p>
-        {formState.errors && (
-          <ul className="errors">
-            {formState.errors.map((error) => (
-              <li key={error}>{error}</li>
-            ))}
-          </ul>
-        )}
+        {formState.errors && <ul className="errors">
+          {formState.errors.map(error => <li key={error}>
+            {error}
+          </li>)}
+          </ul>}
         <p className="actions">
           <button type="submit">Submit</button>
         </p>
