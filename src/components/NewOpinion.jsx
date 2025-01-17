@@ -1,6 +1,7 @@
 import { isEmpty, hasMinLength, isNotBetween } from "../validation.js";
-import { useActionState, useContext } from 'react'
+import { useActionState, useContext} from 'react'
 import { OpinionsContext } from './../store/opinions-context.jsx'
+import Submit from "./Submit.jsx";
 
 export function NewOpinion() {
   const { addOpinion } = useContext(OpinionsContext)
@@ -64,9 +65,7 @@ export function NewOpinion() {
         {formState.errors && <ul className="errors">
           {formState.errors.map(error => <li key={error}>{error}</li>)}
           </ul>}
-        <p className="actions">
-          <button type="submit">Submit</button>
-        </p>
+        <Submit />
       </form>
     </div>
   );
