@@ -1,6 +1,6 @@
-import { isEmpty, hasMinLength, isNotBetween } from "./../validation.js";
-import { useActionState, useContext } from "react";
-import {OpinionsContext} from './../store/opinions-context.jsx'
+import { isEmpty, hasMinLength, isNotBetween } from "../validation.js";
+import { useActionState, useContext } from 'react'
+import { OpinionsContext } from './../store/opinions-context.jsx'
 
 export function NewOpinion() {
   const { addOpinion } = useContext(OpinionsContext)
