@@ -1,5 +1,26 @@
+import { useContext, useActionState } from "react";
+import { OpinionsContext } from "../store/opinions-context";
+import UpvoteOpinion from "./UpvoteOpinion";
+import DownvoteOpinion from "./DownvoteOpinion";
+
 export function Opinion({ opinion: { id, title, body, userName, votes } }) {
+  const {upvoteOpinion, downvoteOpinion} = useContext(OpinionsContext);
+  
+  const upvoteAction = async () => {
+    await upvoteOpinion(id)
+    console.log("upVote")
+  }
+  
+  const downvoteAction = async () => {
+    await downvoteOpinion(id)
+    console.log("downVote")
+  }
+
+  // const [upvoteFormState, upvoteFormAction, upvoteFormPending ] = useActionState(upvoteAction)
+  // const [downvoteFormState, downvoteFormAction, downvoteFormPending ] = useActionState(downvoteAction)
+  
   return (
+    // <article onClick={() => loadOpinion(id)}>
     <article>
       <header>
         <h3>{title}</h3>
@@ -7,7 +28,7 @@ export function Opinion({ opinion: { id, title, body, userName, votes } }) {
       </header>
       <p>{body}</p>
       <form className="votes">
-        <button>
+        {/* <button formAction={upvoteFormAction} disabled={upvoteFormPending || downvoteFormPending}>
           <svg
             xmlns="http://www.w3.org/2000/svg"
             width="24"
@@ -23,11 +44,13 @@ export function Opinion({ opinion: { id, title, body, userName, votes } }) {
             <path d="m16 12-4-4-4 4" />
             <path d="M12 16V8" />
           </svg>
-        </button>
+        </button> */}
+        <UpvoteOpinion formAction={upvoteAction}/>
 
         <span>{votes}</span>
-
-        <button>
+        
+        <DownvoteOpinion formAction={downvoteAction}/>
+        {/* <button formAction={downvoteFormAction} disabled={upvoteFormPending || downvoteFormPending}>
           <svg
             xmlns="http://www.w3.org/2000/svg"
             width="24"
@@ -43,7 +66,7 @@ export function Opinion({ opinion: { id, title, body, userName, votes } }) {
             <path d="M12 8v8" />
             <path d="m8 12 4 4 4-4" />
           </svg>
-        </button>
+        </button> */}
       </form>
     </article>
   );
